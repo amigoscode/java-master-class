@@ -9,8 +9,13 @@ import java.util.UUID;
 
 public class CarBookingService {
 
-    private final CarBookingDao carBookingDao = new CarBookingDao();
-    private final CarService carService = new CarService();
+    private final CarBookingDao carBookingDao;
+    private final CarService carService;
+
+    public CarBookingService(CarBookingDao carBookingDao, CarService carService) {
+        this.carBookingDao = carBookingDao;
+        this.carService = carService;
+    }
 
     public UUID bookCar(User user, String regNumber) {
         Car[] availableCars = getAvailableCars();

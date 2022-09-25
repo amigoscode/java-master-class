@@ -1,9 +1,14 @@
 package com.amigoscode;
 
 import com.amigoscode.booking.CarBooking;
+import com.amigoscode.booking.CarBookingDao;
 import com.amigoscode.booking.CarBookingService;
 import com.amigoscode.car.Car;
+import com.amigoscode.car.CarDAO;
+import com.amigoscode.car.CarService;
 import com.amigoscode.user.User;
+import com.amigoscode.user.UserDao;
+import com.amigoscode.user.UserFileDataAccessService;
 import com.amigoscode.user.UserService;
 
 import java.util.Scanner;
@@ -13,8 +18,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-        UserService userService = new UserService();
-        CarBookingService carBookingService = new CarBookingService();
+        UserDao userDao = new UserFileDataAccessService();
+        UserService userService = new UserService(userDao);
+
+        CarBookingDao carBookingDao = new CarBookingDao();
+        CarDAO carDAO = new CarDAO();
+
+        CarService carService = new CarService(carDAO);
+        CarBookingService carBookingService = new CarBookingService(carBookingDao, carService);
 
         Scanner scanner = new Scanner(System.in);
 
