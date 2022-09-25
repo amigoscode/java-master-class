@@ -1,5 +1,6 @@
 package com.amigoscode.user;
 
+import java.util.List;
 import java.util.UUID;
 
 public class UserService {
@@ -9,7 +10,7 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public User[] getUsers() {
+    public List<User> getUsers() {
         return userDao.getUsers();
     }
 

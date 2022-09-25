@@ -1,43 +1,24 @@
 package com.amigoscode.booking;
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class CarBookingDao {
 
-    private final static CarBooking[] carBookings;
+    private final static List<CarBooking> carBookings;
 
     static {
-        carBookings = new CarBooking[10];
+        carBookings = new ArrayList<CarBooking>();
     }
 
-    public CarBooking[] getCarBookings() {
+    public List<CarBooking> getCarBookings() {
         return carBookings;
     }
 
     public void book(CarBooking carBooking) {
-        int nextFreeIndex = -1;
-
-        for (int i = 0; i < carBookings.length; i++) {
-            if (carBookings[i] == null) {
-                nextFreeIndex = i;
-            }
-        }
-
-        if (nextFreeIndex > -1) {
-            carBookings[nextFreeIndex] = carBooking;
-            return;
-        }
-
-        // full array
-        // copy all bookings to new array with bigger space
-        CarBooking[] biggerCarBookings = new CarBooking[carBookings.length + 10];
-
-        for (int i = 0; i < carBookings.length; i++) {
-            biggerCarBookings[i] = carBookings[i];
-        }
-
-        // finally add new booking
-        biggerCarBookings[carBookings.length] = carBooking;
+        carBookings.add(carBooking);
 
     }
 
