@@ -6,10 +6,7 @@ import com.amigoscode.booking.CarBookingService;
 import com.amigoscode.car.Car;
 import com.amigoscode.car.CarDAO;
 import com.amigoscode.car.CarService;
-import com.amigoscode.user.User;
-import com.amigoscode.user.UserDao;
-import com.amigoscode.user.UserFileDataAccessService;
-import com.amigoscode.user.UserService;
+import com.amigoscode.user.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -19,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        UserDao userDao = new UserFileDataAccessService();
+        UserDao userDao = new UserFakerDataAccessService();
         UserService userService = new UserService(userDao);
 
         CarBookingDao carBookingDao = new CarBookingDao();
