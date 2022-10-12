@@ -1,31 +1,18 @@
 package com.amigoscode;
 
-import java.math.BigDecimal;
-
 public class Main {
 
     public static void main(String[] args) {
-
-        Address address = new Address(
-                "foobar st",
-                "NE33",
-                "England"
+        double yield = calculatePropertyYield(
+                1_300, 250_000
         );
+        System.out.println(yield);
+    }
 
-        Car tesla = new Car(
-                CarBrand.TESLA,
-                new BigDecimal("65000")
-        );
-
-        Car[] cars = {tesla};
-
-        Person alex = new Person(
-                "Alex",
-                22,
-                address,
-                cars
-        );
-
-        System.out.println(alex);
+    private static double calculatePropertyYield(
+            double rent, double propertyPrice
+    ) {
+        double yearlyRent = rent * 12;
+        return (yearlyRent / propertyPrice) * 100;
     }
 }
