@@ -38,16 +38,17 @@ public class CarService {
         Iterator<Car> iter = availableCars.iterator();
         while (iter.hasNext()) {
             Car car = iter.next();
+
+            boolean isBooked = false;
             for (Booking booking : bookings) {
-                if (isElectric) {
-                    if (booking != null && booking.getCar().getRegNumber().equals(car.getRegNumber()) && car.isElectric()) {
-                        iter.remove();
-                    }
-                } else {
-                    if (booking != null && booking.getCar().getRegNumber().equals(car.getRegNumber())) {
-                        iter.remove();
-                    }
+                isBooked = booking.getCar().getRegNumber().equals(car.getRegNumber());
+                if (isBooked) {
+                    break;
                 }
+            }
+
+            if (isBooked && (!isElectric || car.isElectric())) {
+                iter.remove();
             }
         }
 
