@@ -26,6 +26,6 @@ public class CarDao {
 
     public List<Car> getElectricCars() {
         // attempt to use streams
-        return cars.stream().filter(car -> car.isElectric()).collect(Collectors.toList());
+        return cars.stream().filter(Car::isElectric).collect(Collectors.toList());
     }
 }

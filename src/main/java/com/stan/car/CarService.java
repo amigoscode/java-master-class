@@ -40,11 +40,11 @@ public class CarService {
             Car car = iter.next();
             for (Booking booking : bookings) {
                 if (isElectric) {
-                    if (booking != null && booking.getCar().getRegNumber() == car.getRegNumber() && car.isElectric()) {
+                    if (booking != null && booking.getCar().getRegNumber().equals(car.getRegNumber()) && car.isElectric()) {
                         iter.remove();
                     }
                 } else {
-                    if (booking != null && booking.getCar().getRegNumber() == car.getRegNumber()) {
+                    if (booking != null && booking.getCar().getRegNumber().equals(car.getRegNumber())) {
                         iter.remove();
                     }
                 }
