@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.stan.car.Brand.*;
 
@@ -24,13 +25,7 @@ public class CarDao {
     }
 
     public List<Car> getElectricCars() {
-        List<Car> electricCars = new ArrayList<>();
-        for (Car car : cars) {
-            if (car.isElectric()) {
-                electricCars.add(car);
-            }
-        }
-
-        return electricCars;
+        // attempt to use streams
+        return cars.stream().filter(car -> car.isElectric()).collect(Collectors.toList());
     }
 }
