@@ -3,8 +3,8 @@ package com.stan.car;
 import com.stan.booking.Booking;
 import com.stan.booking.BookingDao;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CarService {
     private CarDao carDao;
@@ -33,26 +33,8 @@ public class CarService {
     }
 
     private static List<Car> getCars(boolean isElectric, List<Car> cars, List<Booking> bookings) {
-        List<Car> availableCars = cars;
-
-        Iterator<Car> iter = availableCars.iterator();
-        while (iter.hasNext()) {
-            Car car = iter.next();
-
-            boolean isBooked = false;
-            for (Booking booking : bookings) {
-                isBooked = booking.getCar().getRegNumber().equals(car.getRegNumber());
-                if (isBooked) {
-                    break;
-                }
-            }
-
-            if (isBooked && (!isElectric || car.isElectric())) {
-                iter.remove();
-            }
-        }
-
-        return availableCars;
+        Set<String> bookedCarRegNumbers = bookings.stream().map(booking -> booking.getCar().getRegNumber()).collect(Collectors.toSet());
+        return cars.stream().filter(car -> !bookedCarRegNumbers.contains(car.getRegNumber())).filter(car -> !isElectric || car.isElectric()).toList();
     }
 
     public List<Car> getElectricCars() {
