@@ -1,0 +1,1 @@
+ALTER TABLE booking ADD COLUMN idempotency_key VARCHAR(255);

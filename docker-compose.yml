@@ -1,0 +1,23 @@
+services:
+  db:
+    container_name: postgres-carrental
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: carrental
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+      POSTGRES_DB: carrental
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db:
