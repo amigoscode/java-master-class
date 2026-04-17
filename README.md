@@ -1,9 +1,9 @@
 # Java CLI Build - Car Booking System
 
-**Course:** Java CLI Build
-**Prepared for:** Amigoscode Academy Students
-**Level:** Junior/Mid-Level Java Engineering
-**Repository:** [github.com/amigoscode/java-master-class](https://github.com/amigoscode/java-master-class)
+- **Course:** Java CLI Build
+- **Prepared for:** Amigoscode Academy Students
+- **Level:** Junior/Mid-Level Java Engineering
+- **Repository:** [github.com/amigoscode/java-master-class](https://github.com/amigoscode/java-master-class)
 
 ---
 
