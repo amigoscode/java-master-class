@@ -1,0 +1,35 @@
+
+In menu car should be able to do the following:
+
+1. User should be able to book a car
+
+2. User should be able to view all car car bookings
+
+    Pass userId to filter
+    if empty: return car + "Has no cars booked"
+
+3. User should be able to view all bookings
+
+4. User should be able to view all avaible cars
+
+5. User should be able to view all avaible Electric cars
+
+6. User should be able to view all users
+
+7. User should be able to exit the menu
+
+8: anything else
+    UserInput not a vaild option
+
+
+
+My apporach:
+
+There are clear entites here: User, Booking, Car, MenuItem
+
+User should call booking to book a car, we can have a reference of car id to booking and list of bookings to car
+
+    One to many relationship
+
+The rest is design perference I believe
+    How we
