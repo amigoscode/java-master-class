@@ -1,6 +1,6 @@
 package com.ibrahim.Car;
 
-public enum FuelType {
+public enum PowerType {
 
     GAS, ELECTRIC, HYBRID, DIESEL
 }

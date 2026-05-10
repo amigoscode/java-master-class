@@ -1,6 +1,8 @@
 package com.ibrahim.Car;
 
 
+import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Car {
@@ -8,19 +10,19 @@ public class Car {
     private UUID carId;
     private String name;
     private int year;
-    private FuelType fuelType;
-
-    //Wanted to do User but might be passing too much info
+    private PowerType powerType;
+    private String regNumber;
+    private BigDecimal rentalPricePerDay;
     private UUID bookingId;
 
 
-
-    public Car(UUID carId, String name, int year, FuelType fuelType) {
+    public Car(UUID carId, String name, int year, PowerType powerType, BigDecimal rentalPricePerDay) {
         this.carId = carId;
         this.name = name;
         this.year = year;
-        this.fuelType = fuelType;
+        this.powerType = powerType;
         this.bookingId = null;
+        this.rentalPricePerDay = rentalPricePerDay;
     }
 
 
@@ -48,12 +50,12 @@ public class Car {
         this.year = year;
     }
 
-    public FuelType getFuelType() {
-        return fuelType;
+    public PowerType getPowerType() {
+        return powerType;
     }
 
-    public void setFuelType(FuelType fuelType) {
-        this.fuelType = fuelType;
+    public void setPowerType(PowerType powerType) {
+        this.powerType = powerType;
     }
 
 
@@ -61,8 +63,36 @@ public class Car {
         return bookingId;
     }
 
+    public String getRegNumber() {
+        return regNumber;
+    }
+
+    public void setRegNumber(String regNumber) {
+        this.regNumber = regNumber;
+    }
+
+    public BigDecimal getRentalPricePerDay() {
+        return rentalPricePerDay;
+    }
+
+    public void setRentalPricePerDay(BigDecimal rentalPricePerDay) {
+        this.rentalPricePerDay = rentalPricePerDay;
+    }
+
     public void setBookingId(UUID bookingId) {
         this.bookingId = bookingId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return year == car.year && Objects.equals(carId, car.carId) && Objects.equals(name, car.name) && powerType == car.powerType && Objects.equals(regNumber, car.regNumber) && Objects.equals(rentalPricePerDay, car.rentalPricePerDay) && Objects.equals(bookingId, car.bookingId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(carId, name, year, powerType, regNumber, rentalPricePerDay, bookingId);
     }
 
     @Override
@@ -71,7 +101,9 @@ public class Car {
                 "carId=" + carId +
                 ", name='" + name + '\'' +
                 ", year=" + year +
-                ", fuelType=" + fuelType +
+                ", powerType=" + powerType +
+                ", regNumber='" + regNumber + '\'' +
+                ", rentalPricePerDay=" + rentalPricePerDay +
                 ", bookingId=" + bookingId +
                 '}';
     }

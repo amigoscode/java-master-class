@@ -1,12 +1,12 @@
 package com.ibrahim.User;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class User {
 
     private String firstName;
     private String lastName;
-    //private Booking[] bookings;
     private UUID userId;
 
     public User(UUID uuid, String firstname) {
@@ -32,13 +32,24 @@ public class User {
     }
 
 
-
     public UUID getUserId() {
         return userId;
     }
 
     public void setUserId(UUID userId) {
         this.userId = userId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(userId, user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, userId);
     }
 
     @Override
