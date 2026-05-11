@@ -2,9 +2,9 @@ package com.ibrahim.MenuItem;
 
 public class MenuItemDao {
 
-    private static final MenuItem[] menuItems;
+    private final MenuItem[] menuItems;
 
-    static {
+     {
         menuItems = new MenuItem[]{
                 new MenuItem(1, "Book Car"),
                 new MenuItem(2, "View All User Booked Cars"),
@@ -17,7 +17,7 @@ public class MenuItemDao {
         };
     }
 
-    public static MenuItem[] getMenuItems() {
+    public MenuItem[] getMenuItems() {
         return menuItems;
     }
 

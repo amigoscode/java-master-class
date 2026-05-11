@@ -1,24 +1,21 @@
 package com.ibrahim.Client;
 
+import com.ibrahim.MenuItem.MenuItemService;
+
 import java.util.Scanner;
 
-import static com.ibrahim.MenuItem.MenuItemService.getMenuItemPrompt;
-import static com.ibrahim.MenuItem.MenuItemService.getMenuItemService;
 
 public class Client {
-    private static final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
+    private final MenuItemService menuItemService = new MenuItemService();
 
-    public static Scanner getScanner() {
-        return scanner;
-    }
+    public void ConsoleRequest() {
 
-    public static void ConsoleRequest(){
-
-        while(true){
-            getMenuItemPrompt();
+        while (true) {
+            menuItemService.getMenuItemPrompt();
             System.out.print("Enter choice: ");
 
-            if (!scanner .hasNextInt()) {
+            if (!scanner.hasNextInt()) {
                 System.out.println("Please enter a number.");
                 scanner.nextLine();
                 continue;
@@ -32,13 +29,11 @@ public class Client {
                 return;
             }
 
-            String result = getMenuItemService(userRequest, scanner);
+            String result = menuItemService.getMenuItemService(userRequest, scanner);
             System.out.println(result);
         }
 
     }
-
-
 
 
 }

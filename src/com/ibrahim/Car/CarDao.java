@@ -6,9 +6,9 @@ import java.util.UUID;
 
 public class CarDao {
 
-    public static final Car[] cars;
+    private static final Car[] cars;
 
-    static {
+     static{
         cars = new Car[]{
                 new Car(UUID.randomUUID(), "Tesla Model 3", 2023, PowerType.ELECTRIC, BigDecimal.valueOf(100)),
                 new Car(UUID.randomUUID(), "Rivian R1T", 2024, PowerType.ELECTRIC, BigDecimal.valueOf(200)),
@@ -19,7 +19,7 @@ public class CarDao {
         };
     }
 
-    public static Car[] getCars() {
+    public Car[] getCars() {
         return cars;
     }
 

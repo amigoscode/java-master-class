@@ -14,10 +14,13 @@ import static com.ibrahim.Utils.IDHelpers.promptForUUID;
 
 public class MenuItemService {
 
+    private final BookingService bookingService = new BookingService();
+    private final MenuItemDao menuItemDao = new MenuItemDao();
+    private final CarService carService = new CarService();
 
-    public static void getMenuItemPrompt() {
+    public void getMenuItemPrompt() {
 
-        for (MenuItem menuItem : MenuItemDao.getMenuItems()) {
+        for (MenuItem menuItem : menuItemDao.getMenuItems()) {
 
             System.out.println(menuItem.getNumber() + " - " + menuItem.getDescription());
         }
@@ -25,7 +28,7 @@ public class MenuItemService {
     }
 
 
-    public static String getMenuItemService(int userRequest, Scanner scanner) {
+    public String getMenuItemService(int userRequest, Scanner scanner) {
         String res = switch (userRequest) {
 
             case 1 -> {
@@ -41,8 +44,8 @@ public class MenuItemService {
 
                 //Getting Car Id
                 UUID carId = promptForUUID(scanner, "What is the Car Id");
-                if (CarService.getCarById(carId) == null) {
-                    yield("Car doesn't exist");
+                if (carService.getCarById(carId) == null) {
+                    yield ("Car doesn't exist");
 
                 }
 
@@ -52,12 +55,12 @@ public class MenuItemService {
                 //Getting End Date
                 LocalDateTime endDate = promptForDate(scanner, "What is the end date? Use YYYY-MM-DD HH:mm format. Example: 2026-05-09 14:30");
                 if (endDate.isBefore(startDate)) {
-                    yield("End date must be greater than start date");
+                    yield ("End date must be greater than start date");
 
                 }
 
 
-                yield BookingService.bookCar(carId, userId, startDate, endDate);
+                yield bookingService.bookCar(carId, userId, startDate, endDate);
             }
             case 2 -> {
 
@@ -68,12 +71,12 @@ public class MenuItemService {
 
                 }
 
-                yield BookingService.getUserBookedCars(userId);
+                yield bookingService.getUserBookedCars(userId);
 
             }
-            case 3 -> BookingService.getActiveBookings();
-            case 4 -> BookingService.getAvailableCars();
-            case 5 -> BookingService.getAvailableElectricCars();
+            case 3 -> bookingService.getActiveBookings();
+            case 4 -> bookingService.getAvailableCars();
+            case 5 -> bookingService.getAvailableElectricCars();
             case 6 -> UserService.getAllUsers();
             default -> "Unrecognized Input. Please Choose from the 7 above numbers!";
         };

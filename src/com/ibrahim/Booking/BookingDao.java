@@ -2,17 +2,19 @@ package com.ibrahim.Booking;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.UUID;
 
 public class BookingDao {
 
-    private static Booking[] bookings;
+    private Booking[] bookings;
 
-    static {
+
+    {
         bookings = new Booking[100];
     }
 
 
-    public static Booking[] getBookings() {
+    public Booking[] getBookings() {
         int bookingAmount = 0;
 
         for (Booking booking : bookings) {
@@ -34,7 +36,7 @@ public class BookingDao {
         return savedBookings;
     }
 
-    public static boolean saveBooking(Booking newBooking) {
+    public boolean saveBooking(Booking newBooking) {
 
         for (int i = 0; i < bookings.length; i++) {
             if (bookings[i] == null) {
@@ -55,17 +57,20 @@ public class BookingDao {
 
     }
 
-    public static boolean cancelBooking(Booking oldBooking) {
+    public boolean cancelBooking(UUID bookingId) {
 
         for (Booking booking : bookings) {
-            if (booking.equals(oldBooking)) {
+            if (booking == null) {
+                continue;
+            }
+            if (booking.getBookingId().equals(bookingId)) {
                 booking.setStatus(Status.CANCELLED);
                 booking.setEndDate(LocalDateTime.now());
-
                 return true;
             }
         }
 
         return false;
+
     }
 }
