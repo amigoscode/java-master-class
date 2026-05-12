@@ -21,7 +21,6 @@ public class Car {
         this.rentalPricePerDay = rentalPricePerDay;
     }
 
-
     public UUID getCarId() {
         return carId;
     }

@@ -4,5 +4,5 @@ package com.ibrahim.Booking;
 public enum Status {
     ACTIVE,
     CANCELLED,
-    Completed
+    COMPLETED
 }

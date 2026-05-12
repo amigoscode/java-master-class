@@ -30,7 +30,6 @@ public class User {
         this.lastName = lastName;
     }
 
-
     public UUID getUserId() {
         return userId;
     }

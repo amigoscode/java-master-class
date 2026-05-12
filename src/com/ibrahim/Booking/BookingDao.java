@@ -28,19 +28,16 @@ public class BookingDao {
                 bookingIdx++;
             }
         }
-
         return savedBookings;
     }
 
     public boolean saveBooking(Booking newBooking) {
-
         for (int i = 0; i < bookings.length; i++) {
             if (bookings[i] == null) {
                 bookings[i] = newBooking;
                 return true;
             }
         }
-
         try {
             Booking[] newBookings = Arrays.copyOf(bookings, bookings.length + 1);
             newBookings[bookings.length] = newBooking;
@@ -50,7 +47,5 @@ public class BookingDao {
             return false;
         }
         return true;
-
     }
-
 }

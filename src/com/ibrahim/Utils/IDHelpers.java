@@ -6,10 +6,8 @@ import java.util.UUID;
 public class IDHelpers {
     public static UUID promptForUUID(Scanner scanner, String prompt) {
         while (true) {
-
             System.out.println(prompt + " (or 0 to cancel)");
             String input = scanner.nextLine().trim();
-
             if (input.equals("0")) {
                 return null;
             }

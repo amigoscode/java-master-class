@@ -18,7 +18,6 @@ public class BookingService {
 
     public UUID bookCar(UUID carId, UUID userId, LocalDateTime startDate, LocalDateTime endDate) {
         Booking[] bookings = bookingDao.getBookings();
-
         for (Booking booking : bookings) {
             if (booking.getCarId().equals(carId)) {
                 if (booking.getStatus().equals(Status.ACTIVE)) {
@@ -26,70 +25,53 @@ public class BookingService {
                 }
             }
         }
-
         User user = userService.getUserById(userId);
         if (user == null) {
             throw new IllegalStateException("User [" + userId + "] not found");
         }
-
         Car car = carService.getCarById(carId);
         if (car == null) {
             throw new IllegalStateException("Car [" + carId + "] not found");
         }
-
         long numberOfDays = ChronoUnit.DAYS.between(startDate, endDate);
         if(numberOfDays <= 0){
             throw new IllegalStateException("Number of days is negative");
         }
-
+        BigDecimal carPrice = car.getRentalPricePerDay().multiply(BigDecimal.valueOf(numberOfDays));
         Booking newBooking = new Booking(UUID.randomUUID(), carId, userId, startDate, endDate, carPrice);
         bookingDao.saveBooking(newBooking);
-
         return newBooking.getBookingId();
     }
 
-    //all bookings
     public Booking[] getActiveBookings() {
         int activeBookingAmount = 0;
-
         for (Booking booking : bookingDao.getBookings()) {
-
             if (booking.getStatus().equals(Status.ACTIVE)) {
                 activeBookingAmount += 1;
             }
         }
-
         Booking[] activeBookings = new Booking[activeBookingAmount];
         Booking[] bookings = bookingDao.getBookings();
-
         int bookingIdx = 0;
         for (Booking booking : bookings) {
-
             if (booking.getStatus().equals(Status.ACTIVE)) {
                 activeBookings[bookingIdx] = booking;
                 bookingIdx++;
-
             }
-
         }
-
         return activeBookings;
     }
 
     public Car[] getUserBookedCars(UUID userId) {
         Booking[] bookings = bookingDao.getBookings();
         int userBookedCarsAmount = 0;
-
         for (Booking booking : bookings) {
-
             if (booking.getUserId().equals(userId) && booking.getStatus().equals(Status.ACTIVE)) {
                 userBookedCarsAmount++;
             }
         }
-
         Car[] userBookedCars = new Car[userBookedCarsAmount];
         int userIdx = 0;
-
         for (Booking booking : bookings) {
             if (booking.getUserId().equals(userId)) {
                 if (booking.getStatus().equals(Status.ACTIVE)) {
@@ -97,12 +79,9 @@ public class BookingService {
                     userBookedCars[userIdx] = car;
                     userIdx += 1;
                 }
-
             }
         }
-
         return userBookedCars;
-
     }
 
     private boolean isCarAvailableForRental(UUID carId) {
@@ -113,60 +92,48 @@ public class BookingService {
                 break;
             }
         }
-        return true;
+        return isAvailable;
     }
 
     public Car[] getAvailableCars() {
         int availableCarAmount = 0;
         Car[] allCars = carService.getAllCars();
-        Booking[] bookings = bookingDao.getBookings();
-
         for (Car car : allCars) {
-            if (isCurrentlyAvailable(car.getCarId(), bookings)) {
+            if (isCarAvailableForRental(car.getCarId())) {
                 availableCarAmount += 1;
             }
         }
-
         Car[] availableCars = new Car[availableCarAmount];
         int carIdx = 0;
-
         for (Car car : allCars) {
-            if (isCurrentlyAvailable(car.getCarId(), bookings)) {
+            if (isCarAvailableForRental(car.getCarId())) {
                 availableCars[carIdx] = car;
                 carIdx += 1;
             }
         }
-
         return availableCars;
-
     }
 
     public Car[] getAvailableElectricCars() {
         int availableElectricCarAmount = 0;
         Car[] allCars = carService.getAllCars();
-        Booking[] bookings = bookingDao.getBookings();
-
         for (Car car : allCars) {
-            if (car.getPowerType().equals(PowerType.ELECTRIC) && isCurrentlyAvailable(car.getCarId(), bookings)) {
+            if (car.getPowerType().equals(PowerType.ELECTRIC) && isCarAvailableForRental(car.getCarId())) {
                 availableElectricCarAmount += 1;
             }
         }
-
         Car[] availableElectricCars = new Car[availableElectricCarAmount];
         int carIdx = 0;
-
         for (Car car : allCars) {
-            if (car.getPowerType().equals(PowerType.ELECTRIC) && isCurrentlyAvailable(car.getCarId(), bookings)) {
+            if (car.getPowerType().equals(PowerType.ELECTRIC) && isCarAvailableForRental(car.getCarId())) {
                 availableElectricCars[carIdx] = car;
                 carIdx += 1;
             }
         }
-
         return availableElectricCars;
     }
 
     public boolean cancelBooking(UUID bookingId) {
-
         for (Booking booking : bookingDao.getBookings()) {
             if (booking == null) {
                 continue;
@@ -177,9 +144,6 @@ public class BookingService {
                 return true;
             }
         }
-
         return false;
-
     }
-
 }
