@@ -38,8 +38,7 @@ public class BookingService {
         }
 
         long numberOfDays = ChronoUnit.DAYS.between(startDate, endDate);
-        BigDecimal carPrice = car.getRentalPricePerDay().multiply(BigDecimal.valueOf(numberOfDays));
-        if(carPrice.compareTo(BigDecimal.ZERO) < 0){
+        if(numberOfDays <= 0){
             throw new IllegalStateException("Number of days is negative");
         }
 
