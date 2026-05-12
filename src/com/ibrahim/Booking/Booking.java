@@ -23,7 +23,6 @@ public class Booking {
         this.startDate = startDate;
         this.endDate = endDate;
         this.price = price;
-
     }
 
     public UUID getBookingId() {

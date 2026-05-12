@@ -1,18 +1,14 @@
 package com.ibrahim.Booking;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.UUID;
 
 public class BookingDao {
 
     private Booking[] bookings;
 
-
     {
         bookings = new Booking[100];
     }
-
 
     public Booking[] getBookings() {
         int bookingAmount = 0;
@@ -57,20 +53,4 @@ public class BookingDao {
 
     }
 
-    public boolean cancelBooking(UUID bookingId) {
-
-        for (Booking booking : bookings) {
-            if (booking == null) {
-                continue;
-            }
-            if (booking.getBookingId().equals(bookingId)) {
-                booking.setStatus(Status.CANCELLED);
-                booking.setEndDate(LocalDateTime.now());
-                return true;
-            }
-        }
-
-        return false;
-
-    }
 }

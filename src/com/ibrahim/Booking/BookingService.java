@@ -1,56 +1,56 @@
 package com.ibrahim.Booking;
 
 import com.ibrahim.Car.Car;
-import com.ibrahim.Car.CarDao;
 import com.ibrahim.Car.CarService;
 import com.ibrahim.Car.PowerType;
-
+import com.ibrahim.User.User;
+import com.ibrahim.User.UserService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.UUID;
-
-
 
 public class BookingService {
 
     private final BookingDao bookingDao = new BookingDao();
     private final CarService carService = new CarService();
+    private final UserService userService = new UserService();
 
-
-
-
-    public String bookCar(UUID carId, UUID userId, LocalDateTime startDate, LocalDateTime endDate) {
+    public UUID bookCar(UUID carId, UUID userId, LocalDateTime startDate, LocalDateTime endDate) {
         Booking[] bookings = bookingDao.getBookings();
 
         for (Booking booking : bookings) {
             if (booking.getCarId().equals(carId)) {
                 if (booking.getStatus().equals(Status.ACTIVE)) {
-                    return ("Car Already Booked");
+                    throw new IllegalStateException("car already booked");
                 }
             }
         }
 
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            throw new IllegalStateException("User [" + userId + "] not found");
+        }
+
         Car car = carService.getCarById(carId);
         if (car == null) {
-            return "Car not found";
+            throw new IllegalStateException("Car [" + carId + "] not found");
         }
 
         long numberOfDays = ChronoUnit.DAYS.between(startDate, endDate);
         BigDecimal carPrice = car.getRentalPricePerDay().multiply(BigDecimal.valueOf(numberOfDays));
+        if(carPrice.compareTo(BigDecimal.ZERO) < 0){
+            throw new IllegalStateException("Number of days is negative");
+        }
+
         Booking newBooking = new Booking(UUID.randomUUID(), carId, userId, startDate, endDate, carPrice);
-
         bookingDao.saveBooking(newBooking);
-        carService.updateCarBooking(carId, newBooking.getBookingId());
 
-
-        return newBooking.toString();
+        return newBooking.getBookingId();
     }
 
-
     //all bookings
-    public String getActiveBookings() {
+    public Booking[] getActiveBookings() {
         int activeBookingAmount = 0;
 
         for (Booking booking : bookingDao.getBookings()) {
@@ -74,27 +74,21 @@ public class BookingService {
 
         }
 
-        return Arrays.toString(activeBookings);
-
-
+        return activeBookings;
     }
 
-
-    public String getUserBookedCars(UUID userId) {
-
+    public Car[] getUserBookedCars(UUID userId) {
+        Booking[] bookings = bookingDao.getBookings();
         int userBookedCarsAmount = 0;
 
-        for (Booking booking : bookingDao.getBookings()) {
-
+        for (Booking booking : bookings) {
 
             if (booking.getUserId().equals(userId) && booking.getStatus().equals(Status.ACTIVE)) {
                 userBookedCarsAmount++;
             }
         }
 
-
         Car[] userBookedCars = new Car[userBookedCarsAmount];
-        Booking[] bookings = bookingDao.getBookings();
         int userIdx = 0;
 
         for (Booking booking : bookings) {
@@ -108,104 +102,82 @@ public class BookingService {
             }
         }
 
-
-        return Arrays.toString(userBookedCars);
-
+        return userBookedCars;
 
     }
 
-    public String getAvailableCars() {
+    private boolean isCurrentlyAvailable(UUID carId, Booking[] bookings) {
+        for (Booking b : bookings) {
+            if (b.getCarId().equals(carId) && b.getStatus() == Status.ACTIVE) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Car[] getAvailableCars() {
         int availableCarAmount = 0;
-
-        for (Booking booking : bookingDao.getBookings()) {
-            if (booking.getStatus().equals(Status.CANCELLED) || booking.getStatus().equals(Status.Completed)) {
-                availableCarAmount += 1;
-            }
-        }
-
-        for (Car car : carService.getAllCars()) {
-            if (car.getBookingId() == null) {
-                availableCarAmount += 1;
-            }
-        }
-
-
-        Car[] availableCars = new Car[availableCarAmount];
+        Car[] allCars = carService.getAllCars();
         Booking[] bookings = bookingDao.getBookings();
 
-        int carIdx = 0;
-        for (Booking booking : bookings) {
-
-            if (booking.getStatus().equals(Status.CANCELLED) || booking.getStatus().equals(Status.Completed)) {
-                Car car = carService.getCarById(booking.getCarId());
-                availableCars[carIdx] = car;
-                carIdx++;
-
+        for (Car car : allCars) {
+            if (isCurrentlyAvailable(car.getCarId(), bookings)) {
+                availableCarAmount += 1;
             }
-
         }
-        for (Car car : carService.getAllCars()) {
-            if (car.getBookingId() == null) {
+
+        Car[] availableCars = new Car[availableCarAmount];
+        int carIdx = 0;
+
+        for (Car car : allCars) {
+            if (isCurrentlyAvailable(car.getCarId(), bookings)) {
                 availableCars[carIdx] = car;
                 carIdx += 1;
             }
         }
 
-
-        return Arrays.toString(availableCars);
+        return availableCars;
 
     }
 
-
-    public String getAvailableElectricCars() {
+    public Car[] getAvailableElectricCars() {
         int availableElectricCarAmount = 0;
+        Car[] allCars = carService.getAllCars();
+        Booking[] bookings = bookingDao.getBookings();
 
-        for (Booking booking : bookingDao.getBookings()) {
-
-
-            if (booking.getStatus().equals(Status.CANCELLED) || booking.getStatus().equals(Status.Completed)) {
-                Car car = carService.getCarById(booking.getCarId());
-                if (car == null) {
-                    return "Car not found";
-                }
-                if (car.getPowerType().equals(PowerType.ELECTRIC)) {
-                    availableElectricCarAmount += 1;
-                }
-
-            }
-        }
-        for (Car car : carService.getAllCars()) {
-            if (car.getBookingId() == null && car.getPowerType().equals(PowerType.ELECTRIC)) {
+        for (Car car : allCars) {
+            if (car.getPowerType().equals(PowerType.ELECTRIC) && isCurrentlyAvailable(car.getCarId(), bookings)) {
                 availableElectricCarAmount += 1;
             }
         }
 
         Car[] availableElectricCars = new Car[availableElectricCarAmount];
-        Booking[] bookings = bookingDao.getBookings();
-
         int carIdx = 0;
-        for (Booking booking : bookings) {
 
-            if (booking.getStatus().equals(Status.CANCELLED) || booking.getStatus().equals(Status.Completed)) {
-                Car car = carService.getCarById(booking.getCarId());
-                assert car != null;
-                if (car.getPowerType().equals(PowerType.ELECTRIC)) {
-                    availableElectricCars[carIdx] = car;
-                    carIdx += 1;
-                }
-
-            }
-
-        }
-
-        for (Car car : carService.getAllCars()) {
-            if (car.getBookingId() == null && car.getPowerType().equals(PowerType.ELECTRIC)) {
+        for (Car car : allCars) {
+            if (car.getPowerType().equals(PowerType.ELECTRIC) && isCurrentlyAvailable(car.getCarId(), bookings)) {
                 availableElectricCars[carIdx] = car;
                 carIdx += 1;
             }
         }
 
-        return Arrays.toString(availableElectricCars);
+        return availableElectricCars;
+    }
+
+    public boolean cancelBooking(UUID bookingId) {
+
+        for (Booking booking : bookingDao.getBookings()) {
+            if (booking == null) {
+                continue;
+            }
+            if (booking.getBookingId().equals(bookingId)) {
+                booking.setStatus(Status.CANCELLED);
+                booking.setEndDate(LocalDateTime.now());
+                return true;
+            }
+        }
+
+        return false;
 
     }
 

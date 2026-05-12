@@ -1,9 +1,7 @@
 package com.ibrahim.Client;
 
 import com.ibrahim.MenuItem.MenuItemService;
-
 import java.util.Scanner;
-
 
 public class Client {
     private final Scanner scanner = new Scanner(System.in);
@@ -34,6 +32,5 @@ public class Client {
         }
 
     }
-
 
 }

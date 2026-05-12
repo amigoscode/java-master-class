@@ -1,6 +1,5 @@
 package com.ibrahim.Car;
 
-
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
@@ -13,15 +12,12 @@ public class Car {
     private PowerType powerType;
     private String regNumber;
     private BigDecimal rentalPricePerDay;
-    private UUID bookingId;
-
 
     public Car(UUID carId, String name, int year, PowerType powerType, BigDecimal rentalPricePerDay) {
         this.carId = carId;
         this.name = name;
         this.year = year;
         this.powerType = powerType;
-        this.bookingId = null;
         this.rentalPricePerDay = rentalPricePerDay;
     }
 
@@ -58,11 +54,6 @@ public class Car {
         this.powerType = powerType;
     }
 
-
-    public UUID getBookingId() {
-        return bookingId;
-    }
-
     public String getRegNumber() {
         return regNumber;
     }
@@ -79,20 +70,16 @@ public class Car {
         this.rentalPricePerDay = rentalPricePerDay;
     }
 
-    public void setBookingId(UUID bookingId) {
-        this.bookingId = bookingId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Car car = (Car) o;
-        return year == car.year && Objects.equals(carId, car.carId) && Objects.equals(name, car.name) && powerType == car.powerType && Objects.equals(regNumber, car.regNumber) && Objects.equals(rentalPricePerDay, car.rentalPricePerDay) && Objects.equals(bookingId, car.bookingId);
+        return year == car.year && Objects.equals(carId, car.carId) && Objects.equals(name, car.name) && powerType == car.powerType && Objects.equals(regNumber, car.regNumber) && Objects.equals(rentalPricePerDay, car.rentalPricePerDay);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(carId, name, year, powerType, regNumber, rentalPricePerDay, bookingId);
+        return Objects.hash(carId, name, year, powerType, regNumber, rentalPricePerDay);
     }
 
     @Override
@@ -104,7 +91,12 @@ public class Car {
                 ", powerType=" + powerType +
                 ", regNumber='" + regNumber + '\'' +
                 ", rentalPricePerDay=" + rentalPricePerDay +
-                ", bookingId=" + bookingId +
                 '}';
     }
 }
+
+
+
+
+
+

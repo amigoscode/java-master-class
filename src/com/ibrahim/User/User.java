@@ -14,7 +14,6 @@ public class User {
         this.firstName = firstname;
     }
 
-
     public String getFirstName() {
         return firstName;
     }

@@ -1,22 +1,22 @@
 package com.ibrahim.User;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 public class UserService {
 
-    public static String getAllUsers() {
-        return Arrays.toString(UserDao.getUsers());
+    private UserDao userDao = new UserDao();
+
+    public User[] getAllUsers() {
+        return userDao.getUsers();
     }
 
-    public static User getUserById(UUID userId) {
-        for (User user : UserDao.getUsers()) {
+    public User getUserById(UUID userId) {
+        for (User user : userDao.getUsers()) {
             if (user.getUserId().equals(userId)) {
                 return user;
             }
         }
         return null;
     }
-
 
 }
