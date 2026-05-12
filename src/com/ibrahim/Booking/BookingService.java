@@ -105,10 +105,12 @@ public class BookingService {
 
     }
 
-    private boolean isCurrentlyAvailable(UUID carId, Booking[] bookings) {
-        for (Booking b : bookings) {
-            if (b.getCarId().equals(carId) && b.getStatus() == Status.ACTIVE) {
-                return false;
+    private boolean isCarAvailableForRental(UUID carId) {
+        boolean isAvailable = true;
+        for (Booking booking : bookingDao.getBookings()) {
+            if (booking.getCarId().equals(carId) && booking.getStatus() == Status.ACTIVE) {
+                isAvailable = false;
+                break;
             }
         }
         return true;
