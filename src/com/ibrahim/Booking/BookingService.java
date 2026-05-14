@@ -11,10 +11,15 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 public class BookingService {
+    private final BookingDao bookingDao;
+    private final CarService carService;
+    private final UserService userService;
 
-    private final BookingDao bookingDao = new BookingDao();
-    private final CarService carService = new CarService();
-    private final UserService userService = new UserService();
+    public BookingService(BookingDao bookingDao, CarService carService, UserService userService) {
+        this.bookingDao = bookingDao;
+        this.carService = carService;
+        this.userService = userService;
+    }
 
     public UUID bookCar(UUID carId, UUID userId, LocalDateTime startDate, LocalDateTime endDate) {
         Booking[] bookings = bookingDao.getBookings();
@@ -25,16 +30,16 @@ public class BookingService {
                 }
             }
         }
-        User user = userService.getUserById(userId);
+        User user = userService.findUserById(userId);
         if (user == null) {
             throw new IllegalStateException("User [" + userId + "] not found");
         }
-        Car car = carService.getCarById(carId);
+        Car car = carService.findCarById(carId);
         if (car == null) {
             throw new IllegalStateException("Car [" + carId + "] not found");
         }
         long numberOfDays = ChronoUnit.DAYS.between(startDate, endDate);
-        if(numberOfDays <= 0){
+        if (numberOfDays <= 0) {
             throw new IllegalStateException("Number of days is negative");
         }
         BigDecimal carPrice = car.getRentalPricePerDay().multiply(BigDecimal.valueOf(numberOfDays));
@@ -75,7 +80,7 @@ public class BookingService {
         for (Booking booking : bookings) {
             if (booking.getUserId().equals(userId)) {
                 if (booking.getStatus().equals(Status.ACTIVE)) {
-                    Car car = carService.getCarById(booking.getCarId());
+                    Car car = carService.findCarById(booking.getCarId());
                     userBookedCars[userIdx] = car;
                     userIdx += 1;
                 }

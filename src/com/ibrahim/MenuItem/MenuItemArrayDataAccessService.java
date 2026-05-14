@@ -1,6 +1,6 @@
 package com.ibrahim.MenuItem;
 
-public class MenuItemDao {
+public class MenuItemArrayDataAccessService implements IMenuItemDao {
 
     private final MenuItem[] menuItems;
 
@@ -17,6 +17,7 @@ public class MenuItemDao {
         };
     }
 
+    @Override
     public MenuItem[] getMenuItems() {
         return menuItems;
     }

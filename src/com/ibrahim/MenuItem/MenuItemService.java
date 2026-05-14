@@ -11,11 +11,17 @@ import static com.ibrahim.Utils.DateHelper.promptForDate;
 import static com.ibrahim.Utils.IDHelpers.promptForUUID;
 
 public class MenuItemService {
+    private final IMenuItemDao menuItemDao;
+    private final CarService carService;
+    private final UserService userService;
+    private final BookingService bookingService;
 
-    private final BookingService bookingService = new BookingService();
-    private final MenuItemDao menuItemDao = new MenuItemDao();
-    private final CarService carService = new CarService();
-    private final UserService userService = new UserService();
+    public MenuItemService(IMenuItemDao menuItemDao, CarService carService, UserService userService, BookingService bookingService) {
+        this.menuItemDao = menuItemDao;
+        this.carService = carService;
+        this.userService = userService;
+        this.bookingService = bookingService;
+    }
 
     public void getMenuItemPrompt() {
         for (MenuItem menuItem : menuItemDao.getMenuItems()) {
@@ -28,13 +34,13 @@ public class MenuItemService {
             case 1 -> {
                 //Getting User Id
                 UUID userId = promptForUUID(scanner, "What is the User Id");
-                if (userService.getUserById(userId) == null) {
+                if (userService.findUserById(userId) == null) {
                     yield "User doesn't exist.";
 
                 }
                 //Getting Car Id
                 UUID carId = promptForUUID(scanner, "What is the Car Id");
-                if (carService.getCarById(carId) == null) {
+                if (carService.findCarById(carId) == null) {
                     yield ("Car doesn't exist");
 
                 }
@@ -51,7 +57,7 @@ public class MenuItemService {
             case 2 -> {
                 //Getting User Id
                 UUID userId = promptForUUID(scanner, "What is the User Id");
-                if (userService.getUserById(userId) == null) {
+                if (userService.findUserById(userId) == null) {
                     System.out.println("User doesn't exist");
                 }
                 yield Arrays.toString(bookingService.getUserBookedCars(userId));

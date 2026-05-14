@@ -1,11 +1,15 @@
 package com.ibrahim.Booking;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Booking {
+public class Booking implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private final UUID bookingId;
     private final UUID carId;

@@ -3,20 +3,22 @@ package com.ibrahim.User;
 import java.util.UUID;
 
 public class UserService {
+    private final UserDao userDao;
 
-    private final UserDao userDao = new UserDao();
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     public User[] getAllUsers() {
         return userDao.getUsers();
     }
 
-    public User getUserById(UUID userId) {
-        for (User user : userDao.getUsers()) {
-            if (user.getUserId().equals(userId)) {
-                return user;
-            }
+    public User findUserById(UUID userId) {
+        User user = userDao.findUserById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User doesn't exist");
         }
-        return null;
+        return user;
     }
 
 }
